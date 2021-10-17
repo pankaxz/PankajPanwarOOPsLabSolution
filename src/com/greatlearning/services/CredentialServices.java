@@ -1,12 +1,11 @@
 package com.greatlearning.services;
 import com.greatlearning.models.Employee;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class CredentialServices {
-    public String capitalLetter = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    public String smallLetter = "abcdefghijklmnopqrstuvwxyz";
-    public String numbers = "1234567890";
-    public String special = "!@#$%^&*()_+-=><";
 
     public boolean CheckEntry(String entry)
     {
@@ -25,21 +24,26 @@ public class CredentialServices {
 
     public String GenerateEmail(Employee employee, String department)
     {
-        return employee.getEmpFirstName().toLowerCase()+employee.getEmpLastName().toLowerCase()+"."+department + "@mycompany.com";
+        return employee.getEmpFirstName().toLowerCase() + employee.getEmpLastName().toLowerCase() + "." + department + "@mycompany.com";
     }
 
-    public String GeneratePassword()
-    {
-        Random random = new Random();
-        String [] chars = {capitalLetter, smallLetter, numbers, special};
-        StringBuilder sbString = new StringBuilder(8);
+    public String GeneratePassword() {
+        StringBuilder generatedString = new StringBuilder();
+        HashMap<String, String> map = new HashMap<>();
 
-        for(int i=0; i < 2; i++){
-            for(int j = 0; j < 4; j++)
-            {
-                sbString.append(chars[j].charAt(random.nextInt(chars[j].length())));
-            }
+        map.put("capital", "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+        map.put("numbers", "0123456789");
+        map.put("specialChar", "~!@#$%^&*()_+{}<>?:[]");
+        map.put("small", "abcdefghijklmnopqrstuvxyz");
+
+        for (Map.Entry<String, String> e : map.entrySet()) {
+            Random random = new Random();
+            int index = (int) (random.nextFloat() * e.getValue().length());
+            generatedString.append(e.getValue().charAt(index));
+            index = (int) (random.nextFloat() * e.getValue().length());
+            generatedString.append(e.getValue().charAt(index));
         }
-        return sbString.toString();
+
+        return (generatedString.toString());
     }
 }
